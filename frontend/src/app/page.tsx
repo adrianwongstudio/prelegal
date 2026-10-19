@@ -1,26 +1,42 @@
-import { Suspense } from "react";
-import { NdaCreator } from "@/components/NdaCreator";
-import { parseTerms } from "@/lib/nda/parseTerms";
-import { readTemplate } from "@/lib/nda/templates";
+import Form from "next/form";
 
-// Read once at module scope: the template is static, so the page is prerendered.
-const terms = parseTerms(readTemplate("Mutual-NDA.md"));
+const inputClass =
+  "w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-[#209dd7] focus:outline-none focus:ring-2 focus:ring-[#209dd7]/30";
 
-export default function Home() {
+/**
+ * Placeholder sign-in screen. There is no authentication yet: submitting simply
+ * navigates into the platform. Inputs have no `name`, so nothing is sent.
+ */
+export default function Login() {
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <header className="space-y-1">
-        <p className="text-sm font-semibold tracking-wide text-slate-500">Prelegal</p>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Mutual NDA Creator</h1>
-        <p className="max-w-2xl text-slate-600">
-          Fill in the details on the left to draft a Common Paper Mutual Non-Disclosure Agreement,
-          then download it as a PDF ready to sign.
-        </p>
-      </header>
+    <main className="flex flex-1 items-center justify-center px-4 py-16">
+      <div className="w-full max-w-sm space-y-8">
+        <header className="space-y-2 text-center">
+          <p className="text-sm font-semibold tracking-wide text-[#ecad0a]">Prelegal</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#032147]">Sign in</h1>
+          <p className="text-sm text-[#888888]">Draft common legal agreements in minutes.</p>
+        </header>
 
-      <Suspense fallback={<p className="text-slate-500">Loading…</p>}>
-        <NdaCreator terms={terms} />
-      </Suspense>
-    </div>
+        <Form
+          action="/nda/"
+          className="space-y-4 rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200"
+        >
+          <label className="block space-y-1 text-sm font-medium text-slate-800">
+            <span>Email</span>
+            <input type="email" autoComplete="email" className={inputClass} />
+          </label>
+          <label className="block space-y-1 text-sm font-medium text-slate-800">
+            <span>Password</span>
+            <input type="password" autoComplete="current-password" className={inputClass} />
+          </label>
+          <button
+            type="submit"
+            className="w-full rounded-md bg-[#753991] px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#753991]/90"
+          >
+            Sign in
+          </button>
+        </Form>
+      </div>
+    </main>
   );
 }
